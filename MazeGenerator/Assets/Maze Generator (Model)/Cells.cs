@@ -193,4 +193,12 @@ public class QuadCell : CellInterface {
 		}
 	}*/
 
+
+
+	// GETTERS AND SETTERS
+	public Vector2 CoreCoordinates{
+		get {
+			return this.core.Coo;
+		}
+	}
 }

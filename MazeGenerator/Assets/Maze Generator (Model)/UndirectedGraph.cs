@@ -5,6 +5,8 @@ using UnityEngine;
 
 public interface GraphVertex {
 	void ConnectToOtherGraphVertex (GraphVertex other);
+	Vector2 CoreCoordinates { get; }
+	// info to display the walls
 }
 
 
