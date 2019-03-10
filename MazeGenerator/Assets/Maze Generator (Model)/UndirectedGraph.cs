@@ -26,7 +26,7 @@ public class UndirectedGraph
 
 		// Connection of cells each other
 		// First line : connexion to the cell at the left
-		for (int j = 1; i < nbColumns; j++) {
+		for (int j = 1; j < nbColumns; j++) {
 			vertices [0, j].ConnectToOtherGraphVertex (vertices [0, j - 1]);
 		}
 
