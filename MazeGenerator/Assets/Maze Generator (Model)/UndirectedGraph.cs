@@ -21,7 +21,7 @@ public class UndirectedGraph
 		// Initialization of each cell
 		for (int i = 0; i < nbLines; i++) {
 			for (int j = 0; j < nbColumns; j++) {
-				vertices [i, j] = new QuadCell (new Vector2 (i * cellSize, j * cellSize), cellSize);
+				vertices [i, j] = new QuadCell (new Vector2 (j * cellSize, i * cellSize), cellSize);
 			}
 		}
 
