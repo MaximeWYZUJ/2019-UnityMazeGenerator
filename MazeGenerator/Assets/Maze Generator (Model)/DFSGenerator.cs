@@ -19,12 +19,10 @@ public class DFSGenerator
 		GraphVertex next;
 		while (!(stack.Count == 0)) {
 			current = stack.Peek ();
-			Debug.Log (current.CoreCoordinates.ToString() + "                                " + Random.Range(0, 10000));
 			current.SetVisited ();
 			next = current.GetRandomUnvisitedNeighbour ();
 
 			if (next == null) { // dead end, every neighbour of the current cell has been visited
-				Debug.Log("Dead end");
 				stack.Pop ();
 			
 			} else {

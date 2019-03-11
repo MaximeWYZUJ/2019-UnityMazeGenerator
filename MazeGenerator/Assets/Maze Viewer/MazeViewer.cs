@@ -16,7 +16,6 @@ public class MazeViewer
 
 
 			foreach (KeyValuePair<Vector2, Vector2> kv in gv.ConnectedWalls) {
-				Debug.Log (kv.Key.ToString () + "   ---->   " + kv.Value.ToString ());
 				Debug.DrawLine (kv.Key, kv.Value, Color.yellow, 2000);
 			}
 		}

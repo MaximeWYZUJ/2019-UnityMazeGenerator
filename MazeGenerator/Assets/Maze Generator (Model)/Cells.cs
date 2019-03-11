@@ -309,7 +309,7 @@ public class QuadCell : CellInterface {
 		// Selection of a random unvisited neighbour
 		int length = unvisitedNeighbours.Count;
 		if (length > 0) {
-			return unvisitedNeighbours[Random.Range (0, length - 1)];
+			return unvisitedNeighbours[Random.Range (0, length)];
 		} else {
 			return null;
 		}
