@@ -5,10 +5,11 @@ using UnityEngine;
 public class Manager : MonoBehaviour {
 
 	public GameObject cellPrefab;
-	private QuadCell[,] maze;
+	private IEnumerable<GraphVertex> maze;
 
 	void Start () {
-		maze = UndirectedGraph.GridCellUndirectedGraph (1, 10, 15);
+		maze = UndirectedGraph.GridCellUndirectedGraph (1.5f, 3, 3);
+		DFSGenerator.Generate (maze);
 		MazeViewer.DisplayGrid (maze, cellPrefab);
 	}
 	

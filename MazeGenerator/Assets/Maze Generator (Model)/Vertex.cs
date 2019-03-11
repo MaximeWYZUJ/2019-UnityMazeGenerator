@@ -7,6 +7,7 @@ public class Vertex
 {
 	private Vector2 coordinates;
 	private List<Vertex> neighbours;
+	private MarkType mark;
 
 
 	// CONSTRUCTORS
@@ -14,6 +15,7 @@ public class Vertex
 	public Vertex (Vector2 coo) {
 		this.coordinates = coo;
 		neighbours = new List<Vertex> ();
+		this.mark = MarkType.Unvisited;
 	}
 
 
@@ -47,6 +49,15 @@ public class Vertex
 	public List<Vertex> Neighbours {
 		get {
 			return this.neighbours;
+		}
+	}
+
+	public MarkType Mark {
+		get {
+			return mark;
+		}
+		set {
+			this.mark = value;
 		}
 	}
 }

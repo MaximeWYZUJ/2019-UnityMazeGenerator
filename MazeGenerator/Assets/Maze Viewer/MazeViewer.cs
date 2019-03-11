@@ -5,10 +5,20 @@ using UnityEngine;
 
 public class MazeViewer
 {
-	public static void DisplayGrid(GraphVertex[,] maze, GameObject vertexPrefab) {
+	public static void DisplayGrid(IEnumerable maze, GameObject vertexPrefab) {
 		foreach (GraphVertex gv in maze) {
 			Vector2 gvPosition = gv.CoreCoordinates;
 			GameObject.Instantiate (vertexPrefab, new Vector3 (gvPosition.x, gvPosition.y, 0), Quaternion.identity);
+
+			foreach (Vector2 connectedGvCoo in gv.ConnectedGraphVerticesCoordinates) {
+				Debug.DrawLine (gv.CoreCoordinates, connectedGvCoo, Color.green, 2000);
+			}
+
+
+			foreach (KeyValuePair<Vector2, Vector2> kv in gv.ConnectedWalls) {
+				Debug.Log (kv.Key.ToString () + "   ---->   " + kv.Value.ToString ());
+				Debug.DrawLine (kv.Key, kv.Value, Color.yellow, 2000);
+			}
 		}
 	}
 }

@@ -4,18 +4,42 @@ using UnityEngine;
 
 
 public interface GraphVertex {
+	// Removes a wall between this cell and another adjacent cell
+	// Does nothing if the 2 cells are not adjacent
+	void RemoveBorderBetweenCells (GraphVertex otherGraphVertex);
+
+	// Joins the cores of this cell and another and merges their common borders
 	void ConnectToOtherGraphVertex (GraphVertex other);
+
+	// Gets the coordinates of the core of this cell
 	Vector2 CoreCoordinates { get; }
-	// info to display the walls
+
+	// Gets the coordinates of all the cores of the adjacent cells
+	List<Vector2> ConnectedGraphVerticesCoordinates { get; }
+
+	// Gets the pairs of coordinates which represent the extremities of the walls
+	List<KeyValuePair<Vector2, Vector2>> ConnectedWalls { get; }
+
+	// Sets this cell as visited
+	void SetVisited();
+
+	// Gets the current mark of this cell (visited or not)
+	MarkType Mark { get; }
+
+	// Gets a random unvisited adjacent cell
+	// returns null if every neighbour is marked visited
+	GraphVertex GetRandomUnvisitedNeighbour ();
 }
 
+
+public enum MarkType {Visited, Unvisited};
 
 
 public class UndirectedGraph
 {
 
 	// Generates a grid of QuadCell
-	public static QuadCell[,] GridCellUndirectedGraph (float cellSize, int nbLines, int nbColumns) {
+	public static IEnumerable<GraphVertex> GridCellUndirectedGraph (float cellSize, int nbLines, int nbColumns) {
 		QuadCell[,] vertices = new QuadCell[nbLines, nbColumns];
 
 		// Initialization of each cell
@@ -45,9 +69,19 @@ public class UndirectedGraph
 			}
 		}
 
-
-		return vertices;
+		// The cast to IEnumerable<GraphVertex> doesn't work, that's why I use the ArrayExtension class
+		return ArrayExtensions.ToEnumerable<GraphVertex> (vertices);
+		//return (IEnumerable<GraphVertex>) vertices;
 	}
 }
 
 
+
+public static class ArrayExtensions
+{
+	public static IEnumerable<T> ToEnumerable<T>(this T[,] target)
+	{
+		foreach (var item in target)
+			yield return item;
+	}
+}

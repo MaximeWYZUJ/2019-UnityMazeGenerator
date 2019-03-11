@@ -73,6 +73,7 @@ public class QuadCell : CellInterface {
 			{ "down left", new Vertex (new Vector2 (coreCoo.x - size / 2, coreCoo.y - size / 2)) },
 			{ "down right", new Vertex (new Vector2 (coreCoo.x + size / 2, coreCoo.y - size / 2)) },
 		};
+		ConnectCorners ();
 
 		this.connectedCells = new Dictionary<string, QuadCell> ();
 	}
@@ -99,8 +100,8 @@ public class QuadCell : CellInterface {
 
 		if (cell.core.Coo.x < this.core.Coo.x - cellSize/2) {
 			// The cell is on the left, so we connect the appropriate corners
-			ReplaceCorner("up left", cell.cornerPoints["up left"]);
-			ReplaceCorner ("down left", cell.cornerPoints ["down left"]);
+			ReplaceCorner("up left", cell.cornerPoints["up right"]);
+			ReplaceCorner ("down left", cell.cornerPoints ["down right"]);
 
 			this.connectedCells.Add ("left", cell);
 			cell.connectedCells.Add ("right", this);
@@ -108,8 +109,8 @@ public class QuadCell : CellInterface {
 
 		} else if (cell.core.Coo.x > this.core.Coo.x + cellSize/2) {
 			// The cell is on the right
-			ReplaceCorner("up right", cell.cornerPoints["up right"]);
-			ReplaceCorner ("down right", cell.cornerPoints ["down right"]);
+			ReplaceCorner("up right", cell.cornerPoints["up left"]);
+			ReplaceCorner ("down right", cell.cornerPoints ["down left"]);
 
 			this.connectedCells.Add ("right", cell);
 			cell.connectedCells.Add ("left", this);
@@ -117,8 +118,8 @@ public class QuadCell : CellInterface {
 
 		} else if (cell.core.Coo.y < this.core.Coo.y - cellSize/2) {
 			// The cell is down
-			ReplaceCorner("down right", cell.cornerPoints["down right"]);
-			ReplaceCorner ("down left", cell.cornerPoints ["down left"]);
+			ReplaceCorner("down right", cell.cornerPoints["up right"]);
+			ReplaceCorner ("down left", cell.cornerPoints ["up left"]);
 
 			this.connectedCells.Add ("down", cell);
 			cell.connectedCells.Add ("up", this);
@@ -126,8 +127,8 @@ public class QuadCell : CellInterface {
 
 		} else if (cell.core.Coo.y > this.core.Coo.y + cellSize/2) {
 			// The cell is up
-			ReplaceCorner("up left", cell.cornerPoints["up left"]);
-			ReplaceCorner ("up right", cell.cornerPoints ["up right"]);
+			ReplaceCorner("up left", cell.cornerPoints["down left"]);
+			ReplaceCorner ("up right", cell.cornerPoints ["down right"]);
 		
 			this.connectedCells.Add ("up", cell);
 			cell.connectedCells.Add ("down", this);
@@ -137,6 +138,54 @@ public class QuadCell : CellInterface {
 		this.core.AddNeighbour (cell.core);
 		cell.core.AddNeighbour (this.core);
 	}
+
+	// Connects the corners of 1 cell
+	public void ConnectCorners() {
+		Vertex upleft = cornerPoints ["up left"];
+		Vertex upright = cornerPoints ["up right"];
+		Vertex downleft = cornerPoints ["down left"];
+		Vertex downright = cornerPoints ["down right"];
+
+
+		upleft.AddNeighbour (upright);
+		upleft.AddNeighbour (downleft);
+
+		upright.AddNeighbour (upleft);
+		upright.AddNeighbour (downright);
+
+		downleft.AddNeighbour (upleft);
+		downleft.AddNeighbour (downright);
+
+		downright.AddNeighbour (downleft);
+		downright.AddNeighbour (upright);
+	}
+
+	public void RemoveBorderBetweenCells (GraphVertex otherGraphVertex) {
+		QuadCell otherCell = (QuadCell)otherGraphVertex;
+
+		foreach (QuadCell c in this.connectedCells.Values) {
+			// We look for the adjacent cell to remove the border
+			if (c.Equals (otherCell)) {
+				// We look for the corner points which are common to the two cells
+				List<Vertex> commonVertices = new List<Vertex> ();
+				foreach (Vertex v1 in this.cornerPoints.Values) {
+					foreach (Vertex v2 in otherCell.cornerPoints.Values) {
+						if (v1.Equals (v2)) {
+							commonVertices.Add (v1);
+						}
+					}
+				}
+
+				// We disconnect all the border points which are common to the 2 cells so that the way is open
+				foreach (Vertex v1 in commonVertices) {
+					foreach (Vertex v2 in commonVertices) {
+						v1.RemoveNeighbour (v2);
+					}
+				}
+			}
+		}
+	}
+
 
 
 	/*// Adds corner points to the dictionary
@@ -199,6 +248,70 @@ public class QuadCell : CellInterface {
 	public Vector2 CoreCoordinates{
 		get {
 			return this.core.Coo;
+		}
+	}
+
+	public List<Vector2> ConnectedGraphVerticesCoordinates{
+		get {
+			List<Vector2> l = new List<Vector2> ();
+			foreach (QuadCell c in this.connectedCells.Values) {
+				l.Add (c.CoreCoordinates);
+			}
+
+			return l;
+		}
+	}
+
+	public List<KeyValuePair<Vector2, Vector2>> ConnectedWalls {
+		get {
+			List<KeyValuePair<Vector2, Vector2>> l = new List<KeyValuePair<Vector2, Vector2>> ();
+			/*foreach (Vertex cp in cornerPoints.Values) {
+				foreach (Vertex v in cp.Neighbours) {
+					l.Add (new KeyValuePair<Vector2, Vector2> (cp.Coo, v.Coo));
+				}
+			}*/
+
+			foreach (Vertex cp1 in cornerPoints.Values) {
+				foreach (Vertex cp2 in cornerPoints.Values) {
+					if (!cp1.Equals (cp2)) {
+						KeyValuePair<Vector2, Vector2> reversePair = new KeyValuePair<Vector2, Vector2> (cp2.Coo, cp1.Coo);
+						if (cp1.Neighbours.Contains (cp2) && !l.Contains (reversePair)) {
+							l.Add (new KeyValuePair<Vector2, Vector2> (cp1.Coo, cp2.Coo));
+						}
+					}
+				}
+			}
+
+			return l;
+		}
+	}
+
+	public void SetVisited() {
+		this.core.Mark = MarkType.Visited;
+	}
+
+	public MarkType Mark {
+		get {
+			return core.Mark;
+		}
+	}
+
+	// Returns a random unvisited neighbours of the cell, or null if there is no unvisited neigbour
+	public GraphVertex GetRandomUnvisitedNeighbour() {
+		// Construction of the list of unvisited neighbours
+		List<QuadCell> unvisitedNeighbours = new List<QuadCell> ();
+		foreach (QuadCell c in connectedCells.Values) {
+			if (c.core.Mark == MarkType.Unvisited) {
+				unvisitedNeighbours.Add (c);
+			}
+		}
+
+		// Selection of a random unvisited neighbour
+		int length = unvisitedNeighbours.Count;
+		if (length > 0) {
+			return unvisitedNeighbours[Random.Range (0, length - 1)];
+		} else {
+			return null;
 		}
 	}
 }
