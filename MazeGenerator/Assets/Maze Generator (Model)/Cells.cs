@@ -280,24 +280,6 @@ public class QuadCell : CellInterface {
 		}
 	}
 
-	/*public List<KeyValuePair<Vector2, Vector2>> ConnectedWalls {
-
-			List<KeyValuePair<Vector2, Vector2>> l = new List<KeyValuePair<Vector2, Vector2>> ();
-
-			foreach (Vertex cp1 in cornerPoints.Values) {
-				foreach (Vertex cp2 in cornerPoints.Values) {
-					if (!cp1.Equals (cp2)) {
-						KeyValuePair<Vector2, Vector2> reversePair = new KeyValuePair<Vector2, Vector2> (cp2.Coo, cp1.Coo);
-						if (cp1.Neighbours.Contains (cp2) && !l.Contains (reversePair)) {
-							l.Add (new KeyValuePair<Vector2, Vector2> (cp1.Coo, cp2.Coo));
-						}
-					}
-				}
-			}
-
-			return l;
-		}
-	}*/
 
 	public void SetVisited() {
 		this.core.Mark = MarkType.Visited;
