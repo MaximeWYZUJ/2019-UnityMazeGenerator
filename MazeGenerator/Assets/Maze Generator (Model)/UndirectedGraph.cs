@@ -18,7 +18,7 @@ public interface GraphVertex {
 	List<Vector2> ConnectedGraphVerticesCoordinates { get; }
 
 	// Gets the pairs of coordinates which represent the extremities of the walls
-	List<KeyValuePair<Vector2, Vector2>> ConnectedWalls { get; }
+	List<Wall> Walls { get; }
 
 	// Sets this cell as visited
 	void SetVisited();

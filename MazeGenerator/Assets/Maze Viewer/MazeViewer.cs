@@ -10,13 +10,15 @@ public class MazeViewer
 			Vector2 gvPosition = gv.CoreCoordinates;
 			GameObject.Instantiate (vertexPrefab, new Vector3 (gvPosition.x, gvPosition.y, 0), Quaternion.identity);
 
-			foreach (Vector2 connectedGvCoo in gv.ConnectedGraphVerticesCoordinates) {
+			// Displays the connexions between the cell cores
+			/*foreach (Vector2 connectedGvCoo in gv.ConnectedGraphVerticesCoordinates) {
 				Debug.DrawLine (gv.CoreCoordinates, connectedGvCoo, Color.green, 2000);
-			}
+			}*/
 
 
-			foreach (KeyValuePair<Vector2, Vector2> kv in gv.ConnectedWalls) {
-				Debug.DrawLine (kv.Key, kv.Value, Color.yellow, 2000);
+			// Displays the walls
+			foreach (Wall w in gv.Walls) {
+				Debug.DrawLine (w.Ext1, w.Ext2, Color.yellow, 2000);
 			}
 		}
 	}

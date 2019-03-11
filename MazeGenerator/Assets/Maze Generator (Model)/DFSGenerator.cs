@@ -16,6 +16,7 @@ public class DFSGenerator
 
 		stack.Push (current);
 
+		// Algorithm
 		GraphVertex next;
 		while (!(stack.Count == 0)) {
 			current = stack.Peek ();

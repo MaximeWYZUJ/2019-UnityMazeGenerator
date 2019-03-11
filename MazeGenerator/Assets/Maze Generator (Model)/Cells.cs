@@ -262,14 +262,27 @@ public class QuadCell : CellInterface {
 		}
 	}
 
-	public List<KeyValuePair<Vector2, Vector2>> ConnectedWalls {
+	public List<Wall> Walls {
 		get {
-			List<KeyValuePair<Vector2, Vector2>> l = new List<KeyValuePair<Vector2, Vector2>> ();
-			/*foreach (Vertex cp in cornerPoints.Values) {
-				foreach (Vertex v in cp.Neighbours) {
-					l.Add (new KeyValuePair<Vector2, Vector2> (cp.Coo, v.Coo));
+			List<Wall> list = new List<Wall> ();
+
+			foreach (Vertex cp1 in cornerPoints.Values) {
+				foreach (Vertex cp2 in cornerPoints.Values) {
+					if (!cp1.Equals (cp2)) {
+						Wall wall = new Wall (cp1.Coo, cp2.Coo);
+						if (cp1.Neighbours.Contains (cp2) && !wall.AlreadyExists (list)) {
+							list.Add (wall);
+						}
+					}
 				}
-			}*/
+			}
+			return list;
+		}
+	}
+
+	/*public List<KeyValuePair<Vector2, Vector2>> ConnectedWalls {
+
+			List<KeyValuePair<Vector2, Vector2>> l = new List<KeyValuePair<Vector2, Vector2>> ();
 
 			foreach (Vertex cp1 in cornerPoints.Values) {
 				foreach (Vertex cp2 in cornerPoints.Values) {
@@ -284,7 +297,7 @@ public class QuadCell : CellInterface {
 
 			return l;
 		}
-	}
+	}*/
 
 	public void SetVisited() {
 		this.core.Mark = MarkType.Visited;

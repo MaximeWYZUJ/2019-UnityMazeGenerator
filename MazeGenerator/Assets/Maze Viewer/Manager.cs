@@ -8,13 +8,9 @@ public class Manager : MonoBehaviour {
 	private IEnumerable<GraphVertex> maze;
 
 	void Start () {
-		maze = UndirectedGraph.GridCellUndirectedGraph (1.5f, 3, 3);
+		maze = UndirectedGraph.GridCellUndirectedGraph (1.5f, 10, 15);
 		DFSGenerator.Generate (maze);
 		MazeViewer.DisplayGrid (maze, cellPrefab);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
 }
