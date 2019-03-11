@@ -21,7 +21,7 @@ public class DFSGenerator
 		while (!(stack.Count == 0)) {
 			current = stack.Peek ();
 			current.SetVisited ();
-			next = current.GetRandomUnvisitedNeighbour ();
+			next = current.GetRandomMarkedNeighbour (MarkType.Unvisited);
 
 			if (next == null) { // dead end, every neighbour of the current cell has been visited
 				stack.Pop ();

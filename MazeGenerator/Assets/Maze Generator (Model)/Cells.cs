@@ -291,22 +291,28 @@ public class QuadCell : CellInterface {
 		}
 	}
 
-	// Returns a random unvisited neighbours of the cell, or null if there is no unvisited neigbour
-	public GraphVertex GetRandomUnvisitedNeighbour() {
-		// Construction of the list of unvisited neighbours
-		List<QuadCell> unvisitedNeighbours = new List<QuadCell> ();
-		foreach (QuadCell c in connectedCells.Values) {
-			if (c.core.Mark == MarkType.Unvisited) {
-				unvisitedNeighbours.Add (c);
-			}
-		}
+	// Returns a random neighbour of the cell with a specified mark, or null if there is no such adjacent cell
+	public GraphVertex GetRandomMarkedNeighbour(MarkType m) {
+		// Construction of the list of marked neighbours
+		List<GraphVertex> markedNeighbours = GetMarkedNeighbours(m);
 
-		// Selection of a random unvisited neighbour
-		int length = unvisitedNeighbours.Count;
+		// Selection of a random marked neighbour
+		int length = markedNeighbours.Count;
 		if (length > 0) {
-			return unvisitedNeighbours[Random.Range (0, length)];
+			return markedNeighbours[Random.Range (0, length)];
 		} else {
 			return null;
 		}
+	}
+
+	// Gets all the adjacent cells with the specified mark
+	public List<GraphVertex> GetMarkedNeighbours(MarkType m) {
+		List<GraphVertex> markedNeighbours = new List<GraphVertex> ();
+		foreach (QuadCell c in connectedCells.Values) {
+			if (c.core.Mark == m) {
+				markedNeighbours.Add ((GraphVertex)c);
+			}
+		}
+		return markedNeighbours;
 	}
 }

@@ -26,9 +26,12 @@ public interface GraphVertex {
 	// Gets the current mark of this cell (visited or not)
 	MarkType Mark { get; }
 
-	// Gets a random unvisited adjacent cell
-	// returns null if every neighbour is marked visited
-	GraphVertex GetRandomUnvisitedNeighbour ();
+	// Gets a random adjacent cell with the specified mark
+	// returns null if there is no cell with this mark
+	GraphVertex GetRandomMarkedNeighbour (MarkType mark);
+
+	// Gets a all the adjacent cells with the specified mark
+	List<GraphVertex> GetMarkedNeighbours (MarkType mark);
 }
 
 
