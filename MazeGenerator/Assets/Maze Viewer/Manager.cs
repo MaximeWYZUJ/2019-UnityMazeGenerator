@@ -10,10 +10,10 @@ public class Manager : MonoBehaviour {
 	void Start () {
 		maze = UndirectedGraph.GridCellUndirectedGraph (1.5f, 10, 15);
 
-		/*PrimGenerator.Generate (maze);
-		MazeViewer.DisplayGrid (maze, cellPrefab, 2000);*/
+		WilsonGenerator.Generate (maze);
+		MazeViewer.DisplayGrid (maze, cellPrefab, 2000);
 
-		StartCoroutine (PrimGenerator.AnimatedGeneration (maze, cellPrefab, 0.2f));
+		//StartCoroutine (WilsonGenerator.AnimatedGeneration (maze, cellPrefab, 1));
 	}
 
 }

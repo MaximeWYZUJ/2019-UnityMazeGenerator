@@ -245,6 +245,16 @@ public class QuadCell : CellInterface {
 
 
 	// GETTERS AND SETTERS
+	public List<GraphVertex> Neighbours {
+		get {
+			List<GraphVertex> list = new List<GraphVertex> ();
+			foreach (QuadCell cell in connectedCells.Values) {
+				list.Add ((GraphVertex)cell);
+			}
+			return list;
+		}
+	}
+
 	public Vector2 CoreCoordinates{
 		get {
 			return this.core.Coo;
@@ -288,6 +298,9 @@ public class QuadCell : CellInterface {
 	public MarkType Mark {
 		get {
 			return core.Mark;
+		}
+		set {
+			this.core.Mark = value;
 		}
 	}
 

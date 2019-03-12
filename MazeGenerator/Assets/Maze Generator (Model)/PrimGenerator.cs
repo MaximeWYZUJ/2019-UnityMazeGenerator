@@ -78,10 +78,10 @@ public class PrimGenerator
 
 
 			// Visualization
-			MazeViewer.DisplayGrid(maze, vertexPrefab);
+			MazeViewer.DisplayGrid(maze, vertexPrefab, deltaTime);
 			yield return new WaitForSecondsRealtime (deltaTime);
 		}
-		MazeViewer.DisplayGrid (maze, vertexPrefab, deltaTime);
+		MazeViewer.DisplayGrid (maze, vertexPrefab, 2000);
 	}
 }
 

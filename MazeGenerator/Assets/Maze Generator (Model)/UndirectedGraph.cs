@@ -17,6 +17,9 @@ public interface GraphVertex {
 	// Gets the coordinates of all the cores of the adjacent cells
 	List<Vector2> ConnectedGraphVerticesCoordinates { get; }
 
+	// Gets the adjacents cells
+	List<GraphVertex> Neighbours { get; }
+
 	// Gets the pairs of coordinates which represent the extremities of the walls
 	List<Wall> Walls { get; }
 
@@ -24,7 +27,7 @@ public interface GraphVertex {
 	void SetVisited();
 
 	// Gets the current mark of this cell (visited or not)
-	MarkType Mark { get; }
+	MarkType Mark { get; set; }
 
 	// Gets a random adjacent cell with the specified mark
 	// returns null if there is no cell with this mark
@@ -35,7 +38,7 @@ public interface GraphVertex {
 }
 
 
-public enum MarkType {Visited, Unvisited};
+public enum MarkType {Visited, Unvisited, TemporaryVisited};
 
 
 public class UndirectedGraph
