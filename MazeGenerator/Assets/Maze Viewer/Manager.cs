@@ -8,12 +8,12 @@ public class Manager : MonoBehaviour {
 	private IEnumerable<GraphVertex> maze;
 
 	void Start () {
-		maze = UndirectedGraph.GridCellUndirectedGraph (1.5f, 10, 15);
+		maze = UndirectedGraph.GridCellUndirectedGraph (1.5f, 30, 40);
 
-		WilsonGenerator.Generate (maze);
+		PrimGenerator.Generate (maze);
 		MazeViewer.DisplayGrid (maze, cellPrefab, 2000);
 
-		//StartCoroutine (WilsonGenerator.AnimatedGeneration (maze, cellPrefab, 1));
+		//StartCoroutine (PrimGenerator.AnimatedGeneration (maze, cellPrefab, 0f));
 	}
 
 }

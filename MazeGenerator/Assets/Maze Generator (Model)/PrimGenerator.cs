@@ -34,7 +34,10 @@ public class PrimGenerator
 			gvToProcess.SetVisited();
 			elementsToProcess.Remove (gvToProcess);
 			foreach (GraphVertex gv in gvToProcess.GetMarkedNeighbours(MarkType.Unvisited)) {
-				elementsToProcess.Add (gv);
+				// We add each unmarked adjacent cell as long as it is not already in the list
+				if (!elementsToProcess.Contains (gv)) {
+					elementsToProcess.Add (gv);
+				}
 			}
 		}
 	}
