@@ -81,9 +81,11 @@ public class PrimGenerator
 
 
 			// Visualization
+			Manager.ClearMazeObjects();
 			MazeViewer.DisplayGrid(maze, vertexPrefab, deltaTime);
 			yield return new WaitForSecondsRealtime (deltaTime);
 		}
+		Manager.ClearMazeObjects ();
 		MazeViewer.DisplayGrid (maze, vertexPrefab, 2000);
 	}
 }
