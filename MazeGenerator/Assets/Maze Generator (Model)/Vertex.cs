@@ -24,7 +24,16 @@ public class Vertex
 	// Add a vertex to the neighbours
 	// Does not do anything if it is already a neighbour
 	public void AddNeighbour(Vertex v) {
-		if (!neighbours.Contains (v)) {
+		bool alreadyIn = false;
+		float delta = 0.1f;
+		foreach(Vertex v1 in neighbours) {
+			if (Vector2.Distance(v1.coordinates, v.coordinates) < delta) {
+				alreadyIn = true;
+				break;
+			}
+		}
+
+		if (!alreadyIn) {
 			neighbours.Add (v);
 		}
 	}
@@ -32,8 +41,11 @@ public class Vertex
 	// Removes a given vertex from the neighbours
 	// Does not do anything if it is not a neighbour
 	public void RemoveNeighbour(Vertex v) {
-		if (neighbours.Contains (v)) {
-			neighbours.Remove (v);
+		float delta = 0.1f;
+		foreach(Vertex v1 in neighbours.ToArray()) {
+			if (Vector2.Distance(v1.coordinates, v.coordinates) < delta) {
+				neighbours.Remove (v1);
+			}
 		}
 	}
 

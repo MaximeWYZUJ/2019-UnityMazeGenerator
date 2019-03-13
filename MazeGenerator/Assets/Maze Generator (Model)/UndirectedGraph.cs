@@ -45,13 +45,18 @@ public class UndirectedGraph
 {
 
 	// Generates a grid of QuadCell
-	public static IEnumerable<GraphVertex> GridCellUndirectedGraph (float cellSize, int nbLines, int nbColumns) {
-		QuadCell[,] vertices = new QuadCell[nbLines, nbColumns];
+	public static IEnumerable<GraphVertex> GridCellUndirectedGraph (float cellSize, int nbLines, int nbColumns, int nbBorders, float angleOffsetX, float angleOffsetY) {
+		RegularCell[,] vertices = new RegularCell[nbLines, nbColumns];
 
 		// Initialization of each cell
 		for (int i = 0; i < nbLines; i++) {
 			for (int j = 0; j < nbColumns; j++) {
-				vertices [i, j] = new QuadCell (new Vector2 (j * cellSize, i * cellSize), cellSize);
+				float coreX = j * cellSize * 2 * Mathf.Cos (angleOffsetX);
+				float coreY = i * cellSize * 2 * Mathf.Sin (angleOffsetY);
+				Vector2 coreCoo = new Vector2 (coreX, coreY);
+
+				vertices [i, j] = new RegularCell (coreCoo, cellSize, nbBorders, angleOffsetX);
+				//vertices [i, j] = new QuadCell (new Vector2 (j * cellSize, i * cellSize), cellSize);
 			}
 		}
 

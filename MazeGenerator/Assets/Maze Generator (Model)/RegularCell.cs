@@ -8,7 +8,7 @@ public class RegularCell : GraphVertex
 {
 	private Vertex core;
 	private float cellSize;
-	private List<Vertex> cornerPoints;
+	public List<Vertex> cornerPoints;
 	private List<RegularCell> connectedCells;
 	private int nbBorders;
 	private float angleOffset;
@@ -16,16 +16,16 @@ public class RegularCell : GraphVertex
 
 	// CONSTRUCTOR
 	// Creates a cell without connected cell
-	public RegularCell(Vertex core, float cellSize, int nbBorders, float angleOffset) {
-		this.core = core;
+	public RegularCell(Vector2 coreCoo, float cellSize, int nbBorders, float angleOffset) {
+		this.core = new Vertex (coreCoo);
 		this.cellSize = cellSize;
 		this.nbBorders = nbBorders;
 		this.angleOffset = angleOffset;
 
 		this.cornerPoints = new List<Vertex> ();
 		for (int i = 0; i < nbBorders; i++) {
-			float angle = i * Mathf.PI / nbBorders + angleOffset;
-			cornerPoints.Add (new Vertex (cellSize * new Vector2 (Mathf.Cos (angle), Mathf.Sin (angle))));
+			float angle = i * 2 * Mathf.PI / nbBorders + angleOffset;
+			cornerPoints.Add (new Vertex (coreCoo + cellSize * new Vector2 (Mathf.Cos (angle), Mathf.Sin (angle))));
 		}
 		ConnectCorners ();
 
@@ -43,8 +43,8 @@ public class RegularCell : GraphVertex
 			cornerPoints [i - 1].AddNeighbour (cornerPoints [i]);
 		}
 		// Connects the first and last corner points in the list
-		cornerPoints [0].AddNeighbour (cornerPoints [cornerPoints.Count]);
-		cornerPoints [cornerPoints.Count].AddNeighbour (cornerPoints [0]);
+		cornerPoints [0].AddNeighbour (cornerPoints [cornerPoints.Count-1]);
+		cornerPoints [cornerPoints.Count-1].AddNeighbour (cornerPoints [0]);
 	}
 
 
@@ -52,8 +52,45 @@ public class RegularCell : GraphVertex
 	public void ConnectToOtherGraphVertex(GraphVertex other) {
 		RegularCell otherCell = (RegularCell)other;
 
+		List<Pair<Vertex>> pairList = new List<Pair<Vertex>> ();
+		float delta = 0.2f;
+
+		foreach (Vertex v1 in this.cornerPoints) {
+			foreach (Vertex v2 in otherCell.cornerPoints) {
+				if (Vector2.Distance (v1.Coo, v2.Coo) < delta) {
+					Pair<Vertex> pair = new Pair<Vertex> (v1, v2);
+					if (!pair.AlreadyExists (pairList)) {
+						pairList.Add (pair);
+					}
+				}
+			}
+		}
+
+		Debug.Assert (pairList.Count == 2);
+
+		foreach (Pair<Vertex> p in pairList) {
+			// Fusion of the pair elements and their respective neighborhood
+			foreach (Vertex v in p.Ext1.Neighbours.ToArray()) {
+				// We add our neighbours to the other corner point
+				p.Ext2.AddNeighbour (v);
+			}
+			// Replacement of the corner in our cell
+			this.cornerPoints.Remove (p.Ext1);
+			this.cornerPoints.Add (p.Ext2);
+		}
+
+
+		// Connection of the cores of each cells
+		core.AddNeighbour (otherCell.core);
+		otherCell.core.AddNeighbour (core);
+
+		// Add to the connected cells lists
+		this.connectedCells.Add (otherCell);
+		otherCell.connectedCells.Add (this);
+
+
 		// We select the 2 pairs of corner points which are the closest between the graph vertices
-		float currentMin1 = cellSize;
+		/*float currentMin1 = cellSize;
 		float currentMin2 = cellSize;
 		Vertex currentVertex1_1 = cornerPoints [0];
 		Vertex currentVertex1_2 = otherCell.cornerPoints [0];
@@ -74,8 +111,8 @@ public class RegularCell : GraphVertex
 		// Second pair
 		foreach (Vertex v1 in cornerPoints) {
 			foreach (Vertex v2 in otherCell.cornerPoints) {
-				if (Vector2.Distance (v1.Coo, v2.Coo) < currentMin1 && v1 != currentVertex1_1 && v2 != currentVertex1_2) {
-					currentMin1 = Vector2.Distance (v1.Coo, v2.Coo);
+				if (Vector2.Distance (v1.Coo, v2.Coo) < currentMin2 && v1 != currentVertex1_1 && v2 != currentVertex1_2) {
+					currentMin2 = Vector2.Distance (v1.Coo, v2.Coo);
 					currentVertex2_1 = v1;
 					currentVertex2_2 = v2;
 				}
@@ -98,15 +135,7 @@ public class RegularCell : GraphVertex
 		}
 		otherCell.cornerPoints.Remove (currentVertex2_2);
 		otherCell.cornerPoints.Add (currentVertex2_1);
-
-
-		// Connection of the cores of each cells
-		core.AddNeighbour (otherCell.core);
-		otherCell.core.AddNeighbour (core);
-
-		// Add to the connected cells lists
-		this.connectedCells.Add (otherCell);
-		otherCell.connectedCells.Add (this);
+*/
 	}
 
 
@@ -120,6 +149,7 @@ public class RegularCell : GraphVertex
 				List<Vertex> commonVertices = new List<Vertex> ();
 				foreach (Vertex v1 in this.cornerPoints) {
 					foreach (Vertex v2 in otherCell.cornerPoints) {
+
 						if (v1.Equals (v2)) {
 							commonVertices.Add (v1);
 						}
