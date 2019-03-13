@@ -3,13 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public interface CellInterface : GraphVertex {
-	// TODO
-}
 
-
-
-public class QuadCell : CellInterface {
+public class QuadCell : GraphVertex {
 
 	private Vertex core;
 	private float cellSize;
