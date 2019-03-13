@@ -45,17 +45,30 @@ public class UndirectedGraph
 {
 
 	// Generates a grid of QuadCell
-	public static IEnumerable<GraphVertex> GridCellUndirectedGraph (float cellSize, int nbLines, int nbColumns, int nbBorders, float angleOffsetX, float angleOffsetY) {
+	public static IEnumerable<GraphVertex> GridCellUndirectedGraph (float cellSize, int nbLines, int nbColumns, int nbBorders) {
 		RegularCell[,] vertices = new RegularCell[nbLines, nbColumns];
 
 		// Initialization of each cell
 		for (int i = 0; i < nbLines; i++) {
 			for (int j = 0; j < nbColumns; j++) {
-				float coreX = j * cellSize * 2 * Mathf.Cos (angleOffsetX);
-				float coreY = i * cellSize * 2 * Mathf.Sin (angleOffsetY);
+				Pair<float> angleOffsets = UndirectedGraph.DetermineAngleOffsets (nbBorders);
+				Pair<float> axisOffsets = DetermineAxisOffsets (nbBorders, cellSize, i);
+
+				float coreX = j * cellSize * 2 * Mathf.Cos (angleOffsets.Ext1);
+				float coreY = i * cellSize * 2 * Mathf.Sin (angleOffsets.Ext2);
+
+				coreY += axisOffsets.Ext2 * 2 * Mathf.Floor (i / 2);
+
+				if (i % 2 == 0) {
+					coreX += axisOffsets.Ext1;
+					coreY += axisOffsets.Ext2;
+				} else {
+					coreY += 2 * axisOffsets.Ext2;
+				}
+
 				Vector2 coreCoo = new Vector2 (coreX, coreY);
 
-				vertices [i, j] = new RegularCell (coreCoo, cellSize, nbBorders, angleOffsetX);
+				vertices [i, j] = new RegularCell (coreCoo, cellSize, nbBorders, angleOffsets.Ext1);
 				//vertices [i, j] = new QuadCell (new Vector2 (j * cellSize, i * cellSize), cellSize);
 			}
 		}
@@ -84,6 +97,67 @@ public class UndirectedGraph
 		return ArrayExtensions.ToEnumerable<GraphVertex> (vertices);
 		//return (IEnumerable<GraphVertex>) vertices;
 	}
+
+
+
+	public static Pair<float> DetermineAngleOffsets(int nbBorders) {
+		float off1 = 0;
+		float off2 = 0;
+		switch (nbBorders) {
+		case 4:
+			{
+				off1 = Mathf.PI / 4;
+				off2 = Mathf.PI / 4;
+				break;
+			}
+		case 6:
+			{
+				off1 = Mathf.PI / 6;
+				off2 = Mathf.PI / 2;
+				break;
+			}
+		case 8:
+			{
+				off1 = Mathf.PI / 8;
+				off2 = Mathf.PI * (3 / 8);
+				break;
+			}
+		}
+		Pair<float> offsets = new Pair<float> (off1, off2);
+
+		return offsets;
+	}
+
+
+	public static Pair<float> DetermineAxisOffsets(int nbBorders, float cellSize, int lineIndex) {
+		float offx = 0;
+		float offy = 0;
+		switch (nbBorders) {
+		case 4:
+			{
+				offx = 0;
+				offy = 0;
+				break;
+			}
+		case 6:
+			{
+				float w = cellSize * 2 * Mathf.Cos (Mathf.PI / 6);
+				float h = 2 * cellSize;
+				offx = w / 2;
+				offy = -h / 4;
+				break;
+			}
+		case 8:
+			{
+				// TODO
+				break;
+			}
+		}
+		Pair<float> offsets = new Pair<float> (offx, offy);
+
+		return offsets;
+	}
+
 }
 
 

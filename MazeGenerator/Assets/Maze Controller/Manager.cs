@@ -38,7 +38,7 @@ public class Manager : MonoBehaviour {
 		Manager.ClearMazeObjects();
 
 		// Construction of the initial maze, with walls everywhere
-		IEnumerable<GraphVertex> maze = UndirectedGraph.GridCellUndirectedGraph (1, this.nbLines, this.nbColumns, this.nbBorders, Mathf.PI/4, Mathf.PI/4);
+		IEnumerable<GraphVertex> maze = UndirectedGraph.GridCellUndirectedGraph (1, this.nbLines, this.nbColumns, this.nbBorders);
 
 		// Selection of the right generator
 		MazeGenerator generator = null;
@@ -90,6 +90,9 @@ public class Manager : MonoBehaviour {
 			Camera.main.orthographicSize = (cameraHeight/cameraWidth) * nbColumns * cellSize / 2;
 		}
 	}
+
+
+
 }
 
 
