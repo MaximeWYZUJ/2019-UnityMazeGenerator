@@ -42,7 +42,7 @@ public class Manager : MonoBehaviour {
 			Camera.main.orthographicSize = (cameraHeight/cameraWidth) * nbColumns * cellSize / 2;
 		}
 
-		// Delete the eventual previous maze
+		// Delete the previous maze (if any)
 		Manager.ClearMazeObjects();
 
 		// Construction of the initial maze, with walls everywhere

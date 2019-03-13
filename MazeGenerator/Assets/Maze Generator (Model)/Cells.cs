@@ -8,51 +8,6 @@ public interface CellInterface : GraphVertex {
 }
 
 
-/*public class Cell : CellInterface {
-
-	private Vertex core;
-	private List<Vertex> borderPoints;
-
-
-	// CONSTRUCTORS
-	// Creates an initial cell with n vertices on its border
-	// n muste be greater than 3
-	public Cell(Vector2 coreCoo, int n) {
-		this.core = new Vertex (coreCoo);
-		this.borderPoints = new List<Vertex> ();
-
-		for (int i = 1; i <= n; i++) {
-			float angle = Mathf.PI / n;
-			Vertex newBP = coreCoo + new Vector2 (Mathf.Cos (angle), Mathf.Sin (angle));
-			borderPoints.Add (newBP);
-		}
-	}
-
-
-
-	// METHODS
-	// Divides the cell into two new cells
-	public Cell[] Divide() {
-		// TODO
-	}
-
-
-
-	// GETTERS AND SETTERS
-	public Vertex Core {
-		get {
-			return this.core;
-		}
-	}
-
-	public List<Vertex> Border {
-		get {
-			return this.borderPoints;
-		}
-	}
-}*/
-
-
 
 public class QuadCell : CellInterface {
 
