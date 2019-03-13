@@ -30,6 +30,18 @@ public class Manager : MonoBehaviour {
 
 
 	public void GenerateMaze(){
+		// Center the camera on the maze
+		Vector2 mazeCenter = new Vector2(nbColumns*cellSize/2, nbLines*cellSize/2);
+		Camera.main.transform.position = new Vector3 (mazeCenter.x - cellSize/2, mazeCenter.y - cellSize/2, Camera.main.transform.position.z);
+
+		float cameraHeight = Camera.main.pixelHeight;
+		float cameraWidth = Camera.main.pixelWidth;
+		if (nbLines > nbColumns * cameraHeight / cameraWidth) {
+			Camera.main.orthographicSize = nbLines * cellSize / 2;
+		} else {
+			Camera.main.orthographicSize = (cameraHeight/cameraWidth) * nbColumns * cellSize / 2;
+		}
+
 		// Delete the eventual previous maze
 		Manager.ClearMazeObjects();
 
