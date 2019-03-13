@@ -188,62 +188,6 @@ public class QuadCell : CellInterface {
 
 
 
-	/*// Adds corner points to the dictionary
-	public void AddCornersWithoutConnecting(Vertex upleft, Vertex upright, Vertex downleft, Vertex downright) {
-		this.cornerPoints.Add ("up left", upleft);
-		this.cornerPoints.Add ("up right", upright);
-		this.cornerPoints.Add ("down left", downleft);
-		this.cornerPoints.Add ("down right", downright);
-	}
-
-	// Adds the corner points and connects them each other (neighborhood)
-	public void AddCorners(Vertex upleft, Vertex upright, Vertex downleft, Vertex downright) {
-		this.cornerPoints.Add ("up left", upleft);
-		this.cornerPoints.Add ("up right", upright);
-		this.cornerPoints.Add ("down left", downleft);
-		this.cornerPoints.Add ("down right", downright);
-
-		upleft.AddNeighbour (upright);
-		upleft.AddNeighbour (downleft);
-
-		upright.AddNeighbour (upleft);
-		upright.AddNeighbour (downright);
-
-		downleft.AddNeighbour (upleft);
-		downleft.AddNeighbour (downright);
-
-		downright.AddNeighbour (downleft);
-		downright.AddNeighbour (upright);
-	}
-
-	// Removes a corner and disconnects it from its neighbours
-	public void RemoveCorner(Vertex v) {
-		if (cornerPoints.ContainsValue (v)) {
-			if (v.Equals (cornerPoints ["up left"])) {
-				//v.RemoveNeighbour (cornerPoints ["up right"]);
-				//v.RemoveNeighbour (cornerPoints ["down left"]);
-				cornerPoints.Remove ("up left");
-
-			} else if (v.Equals (cornerPoints ["up right"])) {
-				//v.RemoveNeighbour (cornerPoints ["up left"]);
-				//v.RemoveNeighbour (cornerPoints ["down right"]);
-				cornerPoints.Remove ("up right");
-
-			} else if (v.Equals (cornerPoints ["down left"])) {
-				//v.RemoveNeighbour (cornerPoints ["down right"]);
-				//v.RemoveNeighbour (cornerPoints ["up left"]);
-				cornerPoints.Remove ("down left");
-
-			} else if (v.Equals (cornerPoints ["down right"])) {
-				//v.RemoveNeighbour (cornerPoints ["up right"]);
-				//v.RemoveNeighbour (cornerPoints ["down left"]);
-				cornerPoints.Remove ("down right");
-			}
-		}
-	}*/
-
-
-
 	// GETTERS AND SETTERS
 	public List<GraphVertex> Neighbours {
 		get {
