@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class DFSGenerator
+public class DFSGenerator : MazeGenerator
 {
 
-	public static void Generate(IEnumerable<GraphVertex> maze) {
+	public void Generate(IEnumerable<GraphVertex> maze) {
 		// Initialization
 		Stack<GraphVertex> stack = new Stack<GraphVertex>();
 
@@ -35,7 +35,7 @@ public class DFSGenerator
 
 
 
-	public static IEnumerator AnimatedGeneration (IEnumerable<GraphVertex> maze, GameObject vertexPrefab, float deltaTime) {
+	public IEnumerator AnimatedGeneration (IEnumerable<GraphVertex> maze, GameObject vertexPrefab, float deltaTime) {
 		// Initialization
 		Stack<GraphVertex> stack = new Stack<GraphVertex>();
 

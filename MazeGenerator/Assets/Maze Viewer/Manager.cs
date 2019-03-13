@@ -4,18 +4,20 @@ using UnityEngine;
 
 public class Manager : MonoBehaviour {
 
-	public GameObject cellPrefab;
-	public GameObject wallPrefab;
+	public GameObject vertexPrefab;
 	public float cellSize;
+	public int nbLines, nbColumns;
+	public bool animated;
+	public GeneratorType genType;
+
+	private IEnumerator currentCoroutine;
 	private IEnumerable<GraphVertex> maze;
+	private bool sizeChanged;
+
 
 	void Start () {
-		maze = UndirectedGraph.GridCellUndirectedGraph (cellSize, 20, 30);
-
-		//PrimGenerator.Generate (maze);
-		//MazeViewer.DisplayGrid (maze, cellPrefab);
-
-		StartCoroutine (WilsonGenerator.AnimatedGeneration (maze, cellPrefab, 0f));
+		currentCoroutine = null;
+		GenerateMaze ();
 	}
 
 
@@ -26,4 +28,50 @@ public class Manager : MonoBehaviour {
 		}
 	}
 
+
+	public void GenerateMaze(){
+		// Delete the eventual previous maze
+		Manager.ClearMazeObjects();
+
+		// Construction of the initial maze, with walls everywhere
+		IEnumerable<GraphVertex> maze = UndirectedGraph.GridCellUndirectedGraph (1, this.nbLines, this.nbColumns);
+
+		// Selection of the right generator
+		MazeGenerator generator = null;
+		switch (this.genType) {
+		case GeneratorType.DFS:
+			{
+				generator = new DFSGenerator ();
+				break;
+			}
+		case GeneratorType.Prim:
+			{
+				generator = new PrimGenerator ();
+				break;
+			}
+		case GeneratorType.Wilson:
+			{
+				generator = new WilsonGenerator ();
+				break;
+			}
+		}
+
+		// Generation of the maze
+		if (this.animated) {
+			currentCoroutine = generator.AnimatedGeneration (maze, vertexPrefab, 0);
+			StartCoroutine(currentCoroutine);
+		} else {
+			generator.Generate (maze);
+			MazeViewer.DisplayGrid (maze, vertexPrefab);
+		}
+	}
+
+	public void CancelAnimation() {
+		if (currentCoroutine != null) {
+			StopCoroutine (currentCoroutine);
+			Manager.ClearMazeObjects ();
+		}
+	}
 }
+
+

@@ -4,9 +4,9 @@ using UnityEngine;
 
 
 
-public class WilsonGenerator
+public class WilsonGenerator : MazeGenerator
 {
-	public static void Generate(IEnumerable<GraphVertex> maze) {
+	public void Generate(IEnumerable<GraphVertex> maze) {
 		// Initialization
 		Stack<GraphVertex> currentPath = new Stack<GraphVertex>();
 
@@ -83,7 +83,7 @@ public class WilsonGenerator
 
 
 
-	public static IEnumerator AnimatedGeneration(IEnumerable<GraphVertex> maze, GameObject vertexPrefab, float deltaTime) {
+	public IEnumerator AnimatedGeneration(IEnumerable<GraphVertex> maze, GameObject vertexPrefab, float deltaTime) {
 		// Initialization
 		Stack<GraphVertex> currentPath = new Stack<GraphVertex>();
 

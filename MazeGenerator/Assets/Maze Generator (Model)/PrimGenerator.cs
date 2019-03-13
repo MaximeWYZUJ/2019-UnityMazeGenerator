@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class PrimGenerator
+public class PrimGenerator : MazeGenerator
 {
-	public static void Generate(IEnumerable<GraphVertex> maze) {
+	public void Generate(IEnumerable<GraphVertex> maze) {
 		// Initialization
 		List<GraphVertex> elementsToProcess = new List<GraphVertex>();
 
@@ -44,7 +44,7 @@ public class PrimGenerator
 
 
 
-	public static IEnumerator AnimatedGeneration(IEnumerable<GraphVertex> maze, GameObject vertexPrefab, float deltaTime) {
+	public IEnumerator AnimatedGeneration(IEnumerable<GraphVertex> maze, GameObject vertexPrefab, float deltaTime) {
 		// Initialization
 		List<GraphVertex> elementsToProcess = new List<GraphVertex>();
 
