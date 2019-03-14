@@ -35,7 +35,7 @@ public class Manager : MonoBehaviour {
 		Manager.ClearMazeObjects();
 
 		// Construction of the initial maze, with walls everywhere
-		IEnumerable<GraphVertex> maze = UndirectedGraph.GridCellUndirectedGraph (1, this.nbLines, this.nbColumns, this.nbBorders);
+		IEnumerable<GraphVertex> maze = UndirectedGraph.GridCellUndirectedGraph (1, this.nbLines, this.nbColumns, this.nbBorders, true);
 
 		// Selection of the right generator
 		MazeGenerator generator = null;
@@ -93,8 +93,7 @@ public class Manager : MonoBehaviour {
 			ymin = Mathf.Min (ymin, coo.y);
 			ymax = Mathf.Max (ymax, coo.y);
 		}
-		Debug.Log ("xmin : " + xmin + " ymin : " + ymin);
-		Debug.Log ("xmax : " + xmax + " ymax : " + ymax);
+
 		// We add cellSize twice in order :
 		//     1) not to crop the cells on the border
 		//     2) to have a bit of padding on the screen border
@@ -102,7 +101,6 @@ public class Manager : MonoBehaviour {
 		float h = ymax - ymin + 2 * cellSize;
 
 		Vector2 mazeCenter = new Vector2 ((xmax + xmin) / 2, (ymax + ymin) / 2);
-		Debug.Log (mazeCenter);
 		Camera.main.transform.position = new Vector3 (mazeCenter.x, mazeCenter.y, Camera.main.transform.position.z);
 
 		float cameraHeight = Camera.main.pixelHeight;

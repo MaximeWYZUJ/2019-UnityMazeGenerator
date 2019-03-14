@@ -27,12 +27,23 @@ public class Pair<T>
 	public bool AlreadyExists(IEnumerable<Pair<T>> list) {
 		foreach (Pair<T> w in list) {
 			if (this.IsEqual (w)) {
-				// This wall is already in the list
+				// This pair is already in the list
 				return true;
 			}
 		}
 
-		// This wall is not in the list
+		// This pair is not in the list
+		return false;
+	}
+
+	public bool OrderedValueExistsIn(IEnumerable<Pair<T>> list) {
+		foreach (Pair<T> w in list) {
+			if (w.ext1.Equals (this.ext1) && w.ext2.Equals (this.ext2)) {
+				return true;
+			}
+		}
+
+		// This pair is not in the list
 		return false;
 	}
 

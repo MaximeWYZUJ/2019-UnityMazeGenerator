@@ -35,6 +35,11 @@ public interface GraphVertex {
 
 	// Gets a all the adjacent cells with the specified mark
 	List<GraphVertex> GetMarkedNeighbours (MarkType mark);
+
+	// Returns the cell connected by the teleport, or null if there is no teleport
+	GraphVertex TeleportCell { get; set; }
+
+	Color TeleportColor { get; set; }
 }
 
 
@@ -45,8 +50,9 @@ public class UndirectedGraph
 {
 
 	// Generates a grid of QuadCell
-	public static IEnumerable<GraphVertex> GridCellUndirectedGraph (float cellSize, int nbLines, int nbColumns, int nbBorders) {
+	public static IEnumerable<GraphVertex> GridCellUndirectedGraph (float cellSize, int nbLines, int nbColumns, int nbBorders, bool putTeleporters) {
 		RegularCell[,] vertices = new RegularCell[nbLines, nbColumns];
+
 
 		// Initialization of each cell
 		for (int i = 0; i < nbLines; i++) {
@@ -69,10 +75,39 @@ public class UndirectedGraph
 				Vector2 coreCoo = new Vector2 (coreX, coreY);
 
 				vertices [i, j] = new RegularCell (coreCoo, cellSize, nbBorders, angleOffsets.Ext1);
-				//vertices [i, j] = new QuadCell (new Vector2 (j * cellSize, i * cellSize), cellSize);
 			}
 		}
 
+
+		List<Pair<int>> teleportersIndexes = new List<Pair<int>> ();
+		if (putTeleporters) {
+			// Sets the indexes of the cells with a teleporter and the number of pairs of teleporters
+			int nbTeleporters = Mathf.FloorToInt(nbLines * nbColumns / 40);
+
+			for (int k = 0; k < 2 * nbTeleporters; k++) {
+				Pair<int> p = new Pair<int> (Random.Range (0, nbLines - 1), Random.Range (0, nbColumns - 1));
+
+				while (p.OrderedValueExistsIn(teleportersIndexes)) {
+					p = new Pair<int> (Random.Range (0, nbLines - 1), Random.Range (0, nbColumns - 1));
+				}
+				teleportersIndexes.Add (p);
+			}
+
+			for (int k = 0; k < 2 * nbTeleporters; k += 2) {
+				Pair<int> id1 = teleportersIndexes [k];
+				Pair<int> id2 = teleportersIndexes [k + 1];
+
+				vertices [id1.Ext1, id1.Ext2].TeleportCell = vertices [id2.Ext1, id2.Ext2];
+				vertices [id2.Ext1, id2.Ext2].TeleportCell = vertices [id1.Ext1, id1.Ext2];
+
+				Color c = Random.ColorHSV ();
+				vertices [id1.Ext1, id1.Ext2].TeleportColor = c;
+				vertices [id2.Ext1, id2.Ext2].TeleportColor = c;
+			}
+		}
+		foreach (Pair<int> p in teleportersIndexes) {
+			Debug.Log ("ext1 : " + p.Ext1 + "   ext2 : " + p.Ext2);
+		}
 
 		// Connection of cells each other
 		if (nbBorders == 4) {

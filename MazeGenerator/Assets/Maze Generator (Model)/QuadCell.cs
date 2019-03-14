@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-
+// This class is deprecated.
 public class QuadCell : GraphVertex {
 
 	private Vertex core;
@@ -221,5 +221,21 @@ public class QuadCell : GraphVertex {
 			}
 		}
 		return markedNeighbours;
+	}
+
+
+	// Returns the cell connected by the teleport, or null if there is no teleport
+	public GraphVertex TeleportCell {
+		get {
+			return null;
+		}
+		set { }
+	}
+
+	public Color TeleportColor {
+		get {
+			return Color.white;
+		}
+		set { }
 	}
 }

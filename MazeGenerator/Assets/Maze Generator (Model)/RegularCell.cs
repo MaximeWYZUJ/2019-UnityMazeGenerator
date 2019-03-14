@@ -12,10 +12,12 @@ public class RegularCell : GraphVertex
 	private List<RegularCell> connectedCells;
 	private int nbBorders;
 	private float angleOffset;
+	private RegularCell teleportConnexion;
+	private Color teleportColor;
 
 
 	// CONSTRUCTOR
-	// Creates a cell without connected cell
+	// Creates a cell without connected cell nor teleport connexion
 	public RegularCell(Vector2 coreCoo, float cellSize, int nbBorders, float angleOffset) {
 		this.core = new Vertex (coreCoo);
 		this.cellSize = cellSize;
@@ -30,6 +32,27 @@ public class RegularCell : GraphVertex
 		ConnectCorners ();
 
 		this.connectedCells = new List<RegularCell> ();
+		this.teleportConnexion = null;
+	}
+
+
+	// Creates a cell with a teleport connexion as first connected cell
+	public RegularCell(Vector2 coreCoo, float cellSize, int nbBorders, float angleOffset, RegularCell teleportCell) {
+		this.core = new Vertex (coreCoo);
+		this.cellSize = cellSize;
+		this.nbBorders = nbBorders;
+		this.angleOffset = angleOffset;
+
+		this.cornerPoints = new List<Vertex> ();
+		for (int i = 0; i < nbBorders; i++) {
+			float angle = i * 2 * Mathf.PI / nbBorders + angleOffset;
+			cornerPoints.Add (new Vertex (coreCoo + cellSize * new Vector2 (Mathf.Cos (angle), Mathf.Sin (angle))));
+		}
+		ConnectCorners ();
+
+		this.connectedCells = new List<RegularCell> ();
+		this.teleportConnexion = teleportCell;
+		this.connectedCells.Add (teleportCell);
 	}
 
 
@@ -206,5 +229,25 @@ public class RegularCell : GraphVertex
 			}
 		}
 		return markedNeighbours;
+	}
+
+	// Returns the cell connected by the teleport, or null if there is no teleport
+	public GraphVertex TeleportCell {
+		get {
+			return teleportConnexion;
+		}
+		set {
+			connectedCells.Add ((RegularCell)value);
+			teleportConnexion = (RegularCell)value;
+		}
+	}
+
+	public Color TeleportColor {
+		get {
+			return teleportColor;
+		}
+		set {
+			teleportColor = value;
+		}
 	}
 }

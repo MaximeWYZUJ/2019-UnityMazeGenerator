@@ -9,8 +9,10 @@ public class MazeViewer
 		foreach (GraphVertex gv in maze) {
 			Vector2 gvPosition = gv.CoreCoordinates;
 			GameObject objCore = GameObject.Instantiate (vertexPrefab, new Vector3 (gvPosition.x, gvPosition.y, vertexPrefab.transform.position.z), Quaternion.identity);
-			if (gv.Mark == MarkType.Unvisited) {
-				objCore.GetComponent<SpriteRenderer> ().color = Color.white;
+
+			// Displays the teleport, if any
+			if (gv.TeleportCell != null) {
+				objCore.GetComponent<SpriteRenderer> ().color = gv.TeleportColor;
 			}
 
 			// Displays the walls
