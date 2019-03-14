@@ -10,6 +10,7 @@ public class Manager : MonoBehaviour {
 	public bool animated;
 	public GeneratorType genType;
 	public int nbBorders;
+	public bool allowTeleporters;
 
 	private IEnumerator currentCoroutine;
 	private IEnumerable<GraphVertex> maze;
@@ -35,7 +36,7 @@ public class Manager : MonoBehaviour {
 		Manager.ClearMazeObjects();
 
 		// Construction of the initial maze, with walls everywhere
-		IEnumerable<GraphVertex> maze = UndirectedGraph.GridCellUndirectedGraph (1, this.nbLines, this.nbColumns, this.nbBorders, true);
+		IEnumerable<GraphVertex> maze = UndirectedGraph.GridCellUndirectedGraph (1, this.nbLines, this.nbColumns, this.nbBorders, this.allowTeleporters);
 
 		// Selection of the right generator
 		MazeGenerator generator = null;

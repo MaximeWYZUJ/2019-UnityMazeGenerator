@@ -12,6 +12,8 @@ public class UIManager : MonoBehaviour {
 	public InputField gridFormatLineField;
 	public InputField gridFormatColumnField;
 	public Button cancelAnimation;
+	public Button switchShape;
+	public Toggle teleportersToggle;
 
 
 	private Manager manager;
@@ -46,6 +48,14 @@ public class UIManager : MonoBehaviour {
 
 		// Cancel animation
 		cancelAnimation.onClick.AddListener (CancelHandler);
+
+		// Allow teleporters
+		teleportersToggle.onValueChanged.AddListener (delegate {
+			ToggleTeleportersHandler ();
+		});
+
+		// Switch between squares and haxagons
+		switchShape.onClick.AddListener(SwitchShapeHandler);
 	}
 	
 
@@ -92,6 +102,20 @@ public class UIManager : MonoBehaviour {
 		}
 
 		manager.genType = g;
+	}
+
+	private void ToggleTeleportersHandler() {
+		manager.allowTeleporters = teleportersToggle.isOn;
+	}
+
+	private void SwitchShapeHandler() {
+		if (manager.nbBorders == 4) {
+			manager.nbBorders = 6;
+			switchShape.GetComponentInChildren<Text> ().text = "Hexagons";
+		} else {
+			manager.nbBorders = 4;
+			switchShape.GetComponentInChildren<Text> ().text = "Squares";
+		}
 	}
 
 }
