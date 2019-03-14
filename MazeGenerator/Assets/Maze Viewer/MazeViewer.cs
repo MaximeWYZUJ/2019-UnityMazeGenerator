@@ -16,7 +16,7 @@ public class MazeViewer
 			}
 
 			// Displays the walls
-			QuadCellViewer cellViewer = objCore.GetComponent<QuadCellViewer>();
+			CellComponent cellViewer = objCore.GetComponent<CellComponent>();
 			foreach (Wall w in gv.Walls) {
 				cellViewer.DisplayWall (w);
 			}

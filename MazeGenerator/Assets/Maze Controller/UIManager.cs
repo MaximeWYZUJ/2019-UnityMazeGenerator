@@ -14,6 +14,8 @@ public class UIManager : MonoBehaviour {
 	public Button cancelAnimation;
 	public Button switchShape;
 	public Toggle teleportersToggle;
+	public Button hideButton;
+	public GameObject leftMenu;
 
 
 	private Manager manager;
@@ -56,12 +58,26 @@ public class UIManager : MonoBehaviour {
 
 		// Switch between squares and haxagons
 		switchShape.onClick.AddListener(SwitchShapeHandler);
+
+		// Hide/Show the left menu
+		hideButton.onClick.AddListener(HideButtonHandler);
 	}
 	
 
 	private void RegenerateHandler() {
 		manager.CancelAnimation ();
 		manager.GenerateMaze ();
+	}
+
+	private void HideButtonHandler() {
+		// If the menu is shown, we hide it
+		if (leftMenu.activeInHierarchy) {
+			leftMenu.SetActive (false);
+			hideButton.GetComponentInChildren<Text> ().text = "Show";
+		} else {
+			leftMenu.SetActive (true);
+			hideButton.GetComponentInChildren<Text> ().text = "Hide";
+		}
 	}
 
 	private void CancelHandler() {
