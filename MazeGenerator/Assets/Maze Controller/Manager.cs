@@ -31,9 +31,6 @@ public class Manager : MonoBehaviour {
 
 
 	public void GenerateMaze(){
-		// Center the camera on the maze
-		SetupCamera();
-
 		// Delete the previous maze (if any)
 		Manager.ClearMazeObjects();
 
@@ -68,7 +65,11 @@ public class Manager : MonoBehaviour {
 			generator.Generate (maze);
 			MazeViewer.DisplayGrid (maze, vertexPrefab);
 		}
+
+		// Center the camera on the maze
+		SetupCamera(maze);
 	}
+
 
 	public void CancelAnimation() {
 		if (currentCoroutine != null) {
@@ -78,16 +79,38 @@ public class Manager : MonoBehaviour {
 	}
 
 
-	private void SetupCamera() {
-		Vector2 mazeCenter = new Vector2(nbColumns*cellSize/2, nbLines*cellSize/2);
-		Camera.main.transform.position = new Vector3 (mazeCenter.x - cellSize/2, mazeCenter.y - cellSize/2, Camera.main.transform.position.z);
+	private void SetupCamera(IEnumerable<GraphVertex> maze) {
+		// Find the corner coordinates of the maze
+		// Could be calculated with nbLines and nbColumns but depends on the border size and not so easy
+		float xmin = 0;
+		float xmax = 0;
+		float ymin = 0;
+		float ymax = 0;
+		foreach (GraphVertex gv in maze) {
+			Vector2 coo = gv.CoreCoordinates;
+			xmin = Mathf.Min (xmin, coo.x);
+			xmax = Mathf.Max (xmax, coo.x);
+			ymin = Mathf.Min (ymin, coo.y);
+			ymax = Mathf.Max (ymax, coo.y);
+		}
+		Debug.Log ("xmin : " + xmin + " ymin : " + ymin);
+		Debug.Log ("xmax : " + xmax + " ymax : " + ymax);
+		// We add cellSize twice in order :
+		//     1) not to crop the cells on the border
+		//     2) to have a bit of padding on the screen border
+		float w = xmax - xmin + 2 * cellSize;
+		float h = ymax - ymin + 2 * cellSize;
+
+		Vector2 mazeCenter = new Vector2 ((xmax + xmin) / 2, (ymax + ymin) / 2);
+		Debug.Log (mazeCenter);
+		Camera.main.transform.position = new Vector3 (mazeCenter.x, mazeCenter.y, Camera.main.transform.position.z);
 
 		float cameraHeight = Camera.main.pixelHeight;
 		float cameraWidth = Camera.main.pixelWidth;
-		if (nbLines > nbColumns * cameraHeight / cameraWidth) {
-			Camera.main.orthographicSize = nbLines * cellSize / 2;
+		if (h > w * cameraHeight / cameraWidth) {
+			Camera.main.orthographicSize = h / 2;
 		} else {
-			Camera.main.orthographicSize = (cameraHeight/cameraWidth) * nbColumns * cellSize / 2;
+			Camera.main.orthographicSize = (cameraHeight/cameraWidth) * w / 2;
 		}
 	}
 
