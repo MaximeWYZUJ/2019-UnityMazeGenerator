@@ -12,7 +12,6 @@ public class MazeViewer
 			if (gv.Mark == MarkType.Unvisited) {
 				objCore.GetComponent<SpriteRenderer> ().color = Color.white;
 			}
-				
 
 			// Displays the walls
 			QuadCellViewer cellViewer = objCore.GetComponent<QuadCellViewer>();

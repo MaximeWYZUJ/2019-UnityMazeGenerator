@@ -8,7 +8,7 @@ public class RegularCell : GraphVertex
 {
 	private Vertex core;
 	private float cellSize;
-	public List<Vertex> cornerPoints;
+	private List<Vertex> cornerPoints;
 	private List<RegularCell> connectedCells;
 	private int nbBorders;
 	private float angleOffset;
@@ -85,57 +85,12 @@ public class RegularCell : GraphVertex
 		otherCell.core.AddNeighbour (core);
 
 		// Add to the connected cells lists
-		this.connectedCells.Add (otherCell);
-		otherCell.connectedCells.Add (this);
-
-
-		// We select the 2 pairs of corner points which are the closest between the graph vertices
-		/*float currentMin1 = cellSize;
-		float currentMin2 = cellSize;
-		Vertex currentVertex1_1 = cornerPoints [0];
-		Vertex currentVertex1_2 = otherCell.cornerPoints [0];
-		Vertex currentVertex2_1 = cornerPoints [0];
-		Vertex currentVertex2_2 = otherCell.cornerPoints [0];
-
-		// First pair
-		foreach (Vertex v1 in cornerPoints) {
-			foreach (Vertex v2 in otherCell.cornerPoints) {
-				if (Vector2.Distance (v1.Coo, v2.Coo) < currentMin1) {
-					currentMin1 = Vector2.Distance (v1.Coo, v2.Coo);
-					currentVertex1_1 = v1;
-					currentVertex1_2 = v2;
-				}
-			}
+		if (!this.connectedCells.Contains (otherCell)) {
+			this.connectedCells.Add (otherCell);
 		}
-
-		// Second pair
-		foreach (Vertex v1 in cornerPoints) {
-			foreach (Vertex v2 in otherCell.cornerPoints) {
-				if (Vector2.Distance (v1.Coo, v2.Coo) < currentMin2 && v1 != currentVertex1_1 && v2 != currentVertex1_2) {
-					currentMin2 = Vector2.Distance (v1.Coo, v2.Coo);
-					currentVertex2_1 = v1;
-					currentVertex2_2 = v2;
-				}
-			}
+		if (!otherCell.connectedCells.Contains (this)) {
+			otherCell.connectedCells.Add (this);
 		}
-
-		// Fusion of the pair elements and their respective neighborhood
-		foreach (Vertex v in currentVertex1_2.Neighbours) {
-			// We add the neighbours of the other corner point to our corner point
-			currentVertex1_1.AddNeighbour (v);
-		}
-		// Replacement of the corner in the other cell
-		otherCell.cornerPoints.Remove (currentVertex1_2);
-		otherCell.cornerPoints.Add (currentVertex1_1);
-
-
-		// Same with the other pair
-		foreach (Vertex v in currentVertex2_2.Neighbours) {
-			currentVertex2_1.AddNeighbour (v);
-		}
-		otherCell.cornerPoints.Remove (currentVertex2_2);
-		otherCell.cornerPoints.Add (currentVertex2_1);
-*/
 	}
 
 

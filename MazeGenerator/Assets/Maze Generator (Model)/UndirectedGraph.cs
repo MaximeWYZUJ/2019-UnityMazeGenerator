@@ -75,22 +75,10 @@ public class UndirectedGraph
 
 
 		// Connection of cells each other
-		// First line : connexion to the cell at the left
-		for (int j = 1; j < nbColumns; j++) {
-			vertices [0, j].ConnectToOtherGraphVertex (vertices [0, j - 1]);
-		}
-
-		// First column : connexion to the up cell
-		for (int i = 1; i < nbLines; i++) {
-			vertices [i, 0].ConnectToOtherGraphVertex (vertices [i - 1, 0]);
-		}
-
-		// All the other elements : connect to the cells on the left and up
-		for (int i = 1; i < nbLines; i++) {
-			for (int j = 1; j < nbColumns; j++) {
-				vertices [i, j].ConnectToOtherGraphVertex (vertices [i - 1, j]);
-				vertices [i, j].ConnectToOtherGraphVertex (vertices [i, j - 1]);
-			}
+		if (nbBorders == 4) {
+			SquareConnections (vertices, nbLines, nbColumns, 4);
+		} else {
+			HexagonConnections (vertices, nbLines, nbColumns, 6);
 		}
 
 		// The cast to IEnumerable<GraphVertex> doesn't work, that's why I use the ArrayExtension class
@@ -156,6 +144,68 @@ public class UndirectedGraph
 		Pair<float> offsets = new Pair<float> (offx, offy);
 
 		return offsets;
+	}
+
+
+	public static void SquareConnections(RegularCell[,] vertices, int nbLines, int nbColumns, int nbBorders) {
+		// First line : connexion to the cell at the left
+		for (int j = 1; j < nbColumns; j++) {
+			vertices [0, j].ConnectToOtherGraphVertex (vertices [0, j - 1]);
+		}
+
+		// First column : connexion to the up cell
+		for (int i = 1; i < nbLines; i++) {
+			vertices [i, 0].ConnectToOtherGraphVertex (vertices [i - 1, 0]);
+		}
+
+		// All the other elements :
+		for (int i = 1; i < nbLines; i++) {
+			for (int j = 1; j < nbColumns; j++) {
+				// connect to the cells on the left and up
+				vertices [i, j].ConnectToOtherGraphVertex (vertices [i - 1, j]);
+				vertices [i, j].ConnectToOtherGraphVertex (vertices [i, j - 1]);
+				}
+			}
+		}
+
+
+	public static void HexagonConnections(RegularCell[,] vertices, int nbLines, int nbColumns, int nbBorders) {
+		// Vertical and horizontal connexions
+		for (int i = 0; i < nbLines; i++) {
+			for (int j = 0; j < nbColumns; j++) {
+				// Horizontal
+				if (j != 0) {
+					vertices [i, j].ConnectToOtherGraphVertex (vertices [i, j - 1]);
+					vertices [i, j - 1].ConnectToOtherGraphVertex (vertices [i, j]);
+				}
+
+				// Vertical
+				if (i != 0) {
+					vertices [i, j].ConnectToOtherGraphVertex (vertices [i - 1, j]);
+					vertices [i - 1, j].ConnectToOtherGraphVertex (vertices [i, j]);
+				}
+			}
+		}
+
+		// Up right diagonal
+		for (int i = 0; i < nbLines - 1; i ++) {
+			for (int j = 0; j < nbColumns - 1; j++) {
+				if (i % 2 == 0) {
+					vertices [i, j].ConnectToOtherGraphVertex (vertices [i + 1, j + 1]);
+					vertices [i + 1, j + 1].ConnectToOtherGraphVertex (vertices [i, j]);
+				}
+			}
+		}
+
+		// Up left diagonal
+		for (int i = 1; i < nbLines - 1; i++) {
+			for (int j = 1; j < nbColumns; j++) {
+				if (i % 2 == 1) {
+					vertices [i, j].ConnectToOtherGraphVertex (vertices [i + 1, j - 1]);
+					vertices [i + 1, j - 1].ConnectToOtherGraphVertex (vertices [i, j]);
+				}
+			}
+		}
 	}
 
 }
