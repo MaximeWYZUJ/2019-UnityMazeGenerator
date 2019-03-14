@@ -39,6 +39,7 @@ public interface GraphVertex {
 	// Returns the cell connected by the teleport, or null if there is no teleport
 	GraphVertex TeleportCell { get; set; }
 
+	// Gets or sets the color of the teleport (if any)
 	Color TeleportColor { get; set; }
 }
 
@@ -57,8 +58,10 @@ public class UndirectedGraph
 		// Initialization of each cell
 		for (int i = 0; i < nbLines; i++) {
 			for (int j = 0; j < nbColumns; j++) {
+				// For each cell, we calculate its center according to the grid
+				// and the optional offsets due to the shape (square/hexagon) and the line number (odd or even)
 				Pair<float> angleOffsets = UndirectedGraph.DetermineAngleOffsets (nbBorders);
-				Pair<float> axisOffsets = DetermineAxisOffsets (nbBorders, cellSize, i);
+				Pair<float> axisOffsets = DetermineAxisOffsets (nbBorders, cellSize);
 
 				float coreX = j * cellSize * 2 * Mathf.Cos (angleOffsets.Ext1);
 				float coreY = i * cellSize * 2 * Mathf.Sin (angleOffsets.Ext2);
@@ -78,12 +81,13 @@ public class UndirectedGraph
 			}
 		}
 
-
+		// We define the number and random indexes of the teleporters
 		List<Pair<int>> teleportersIndexes = new List<Pair<int>> ();
 		if (putTeleporters) {
 			// Sets the indexes of the cells with a teleporter and the number of pairs of teleporters
 			int nbTeleporters = Mathf.FloorToInt(nbLines * nbColumns / 40);
 
+			// Find the right amound of distinct indexes
 			for (int k = 0; k < 2 * nbTeleporters; k++) {
 				Pair<int> p = new Pair<int> (Random.Range (0, nbLines - 1), Random.Range (0, nbColumns - 1));
 
@@ -93,6 +97,7 @@ public class UndirectedGraph
 				teleportersIndexes.Add (p);
 			}
 
+			// Add a teleporter in the data of the corresponding cells
 			for (int k = 0; k < 2 * nbTeleporters; k += 2) {
 				Pair<int> id1 = teleportersIndexes [k];
 				Pair<int> id2 = teleportersIndexes [k + 1];
@@ -105,24 +110,21 @@ public class UndirectedGraph
 				vertices [id2.Ext1, id2.Ext2].TeleportColor = c;
 			}
 		}
-		foreach (Pair<int> p in teleportersIndexes) {
-			Debug.Log ("ext1 : " + p.Ext1 + "   ext2 : " + p.Ext2);
-		}
 
-		// Connection of cells each other
+		// Connexion of cells each other (regardless of the walls)
 		if (nbBorders == 4) {
 			SquareConnections (vertices, nbLines, nbColumns, 4);
 		} else {
 			HexagonConnections (vertices, nbLines, nbColumns, 6);
 		}
 
-		// The cast to IEnumerable<GraphVertex> doesn't work, that's why I use the ArrayExtension class
+		// The cast to IEnumerable<GraphVertex> doesn't work, that's why I use the ArrayExtension class (cf end of file)
 		return ArrayExtensions.ToEnumerable<GraphVertex> (vertices);
-		//return (IEnumerable<GraphVertex>) vertices;
 	}
 
 
 
+	// Returns the right angle offsets (orientation) according to the cell shape
 	public static Pair<float> DetermineAngleOffsets(int nbBorders) {
 		float off1 = 0;
 		float off2 = 0;
@@ -152,7 +154,8 @@ public class UndirectedGraph
 	}
 
 
-	public static Pair<float> DetermineAxisOffsets(int nbBorders, float cellSize, int lineIndex) {
+	// Returns the right axis offsets according to the cell shape (regardless of the even or odd line index)
+	public static Pair<float> DetermineAxisOffsets(int nbBorders, float cellSize) {
 		float offx = 0;
 		float offy = 0;
 		switch (nbBorders) {
@@ -182,6 +185,7 @@ public class UndirectedGraph
 	}
 
 
+	// Connects the cell with the 4 surrounding cells (merges the corners and handle the core neighbourhoods)
 	public static void SquareConnections(RegularCell[,] vertices, int nbLines, int nbColumns, int nbBorders) {
 		// First line : connexion to the cell at the left
 		for (int j = 1; j < nbColumns; j++) {
@@ -204,6 +208,7 @@ public class UndirectedGraph
 		}
 
 
+	// Connects the cell with the 6 surrounding cells (merges the corners and handle the core neighbourhoods)
 	public static void HexagonConnections(RegularCell[,] vertices, int nbLines, int nbColumns, int nbBorders) {
 		// Vertical and horizontal connexions
 		for (int i = 0; i < nbLines; i++) {

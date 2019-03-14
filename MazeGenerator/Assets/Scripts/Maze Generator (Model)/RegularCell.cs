@@ -6,14 +6,14 @@ using UnityEngine;
 
 public class RegularCell : GraphVertex
 {
-	private Vertex core;
-	private float cellSize;
-	private List<Vertex> cornerPoints;
-	private List<RegularCell> connectedCells;
-	private int nbBorders;
-	private float angleOffset;
-	private RegularCell teleportConnexion;
-	private Color teleportColor;
+	private Vertex core; // center of the cell
+	private float cellSize; // radius of the cell
+	private List<Vertex> cornerPoints; // list of points which are on the border
+	private List<RegularCell> connectedCells; // list of the surrounding cells (regardless of the walls)
+	private int nbBorders; // number of points on the border (4 or 6)
+	private float angleOffset; // offset to display the first corner
+	private RegularCell teleportConnexion; // cell connected by a teleport (null if no teleport)
+	private Color teleportColor; // color of the teleport (if any)
 
 
 	// CONSTRUCTOR
@@ -117,6 +117,8 @@ public class RegularCell : GraphVertex
 	}
 
 
+	// Removes the wall between 2 cells by looking a their cornerPoints
+	// Once the common corner points are found, we set them as "non-neighbours"
 	public void RemoveBorderBetweenCells (GraphVertex otherGraphVertex) {
 		RegularCell otherCell = (RegularCell)otherGraphVertex;
 
@@ -127,7 +129,7 @@ public class RegularCell : GraphVertex
 				List<Vertex> commonVertices = new List<Vertex> ();
 				foreach (Vertex v1 in this.cornerPoints) {
 					foreach (Vertex v2 in otherCell.cornerPoints) {
-
+						
 						if (v1.Equals (v2)) {
 							commonVertices.Add (v1);
 						}
@@ -147,6 +149,7 @@ public class RegularCell : GraphVertex
 
 
 	// GETTERS AND SETTERS
+	// List of the surrounding cells
 	public List<GraphVertex> Neighbours {
 		get {
 			List<GraphVertex> list = new List<GraphVertex> ();
@@ -157,12 +160,14 @@ public class RegularCell : GraphVertex
 		}
 	}
 
+	// Coordinates of the center of the cell
 	public Vector2 CoreCoordinates{
 		get {
 			return this.core.Coo;
 		}
 	}
 
+	// Coordinates of the centers of the surrounding cells
 	public List<Vector2> ConnectedGraphVerticesCoordinates{
 		get {
 			List<Vector2> l = new List<Vector2> ();
@@ -174,6 +179,7 @@ public class RegularCell : GraphVertex
 		}
 	}
 
+	// List of the walls of this cell
 	public List<Wall> Walls {
 		get {
 			List<Wall> list = new List<Wall> ();
@@ -192,11 +198,12 @@ public class RegularCell : GraphVertex
 		}
 	}
 
-
+	// Marks that cell as visited
 	public void SetVisited() {
 		this.core.Mark = MarkType.Visited;
 	}
 
+	// Gets or sets the mark of this cell
 	public MarkType Mark {
 		get {
 			return core.Mark;
@@ -242,6 +249,7 @@ public class RegularCell : GraphVertex
 		}
 	}
 
+	// Gets or sets the color of the teleport (if any)
 	public Color TeleportColor {
 		get {
 			return teleportColor;

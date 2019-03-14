@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class Vertex
 {
-	private Vector2 coordinates;
-	private List<Vertex> neighbours;
-	private MarkType mark;
+	private Vector2 coordinates; // coordinates of the vertex in the world space
+	private List<Vertex> neighbours; // list of the vertices this cell is connected to
+	private MarkType mark; // visited, temporary visited or unvisited
 
 
 	// CONSTRUCTORS

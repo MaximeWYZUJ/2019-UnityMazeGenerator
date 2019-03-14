@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+// This class is basically a Pair<Vector2>
 public class Wall
 {
-
+	// Extremities of the wall
 	private Vector2 ext1, ext2;
 
 	// CONSTRUCTOR
@@ -17,6 +18,7 @@ public class Wall
 
 
 	// METHODS
+	// Checks if this wall is the same a the provided wall
 	public bool IsEqual(Wall other) {
 		bool cond1 = (this.ext1.Equals (other.ext1) && this.ext2.Equals (other.ext2));
 		bool cond2 = (this.ext1.Equals (other.ext2) && this.ext2.Equals (other.ext1));
@@ -24,6 +26,8 @@ public class Wall
 		return cond1 || cond2;
 	}
 
+
+	// Checks if there is this wall in the provided list
 	public bool AlreadyExists(IEnumerable<Wall> list) {
 		foreach (Wall w in list) {
 			if (this.IsEqual (w)) {

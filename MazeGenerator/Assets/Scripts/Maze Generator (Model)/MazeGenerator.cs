@@ -5,7 +5,10 @@ using UnityEngine;
 
 public interface MazeGenerator
 {
+	// Method to generate a maze
 	void Generate (IEnumerable<GraphVertex> maze);
+
+	// Method to generate a maze and display every step of it
 	IEnumerator AnimatedGeneration (IEnumerable<GraphVertex> maze, GameObject vertexPrefab, float deltaTime);
 }
 

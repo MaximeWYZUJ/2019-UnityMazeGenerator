@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+// The UIManager is used by the user to modify the presets of the manager
 public class UIManager : MonoBehaviour {
 
+	// All the UI elements to interact with the manager
 	public GameObject managerObj;
 	public Button regenerate;
 	public Dropdown generatorSelector;
@@ -64,11 +67,13 @@ public class UIManager : MonoBehaviour {
 	}
 	
 
+	// Generates a new maze
 	private void RegenerateHandler() {
 		manager.CancelAnimation ();
 		manager.GenerateMaze ();
 	}
 
+	// Shows/Hides the menu
 	private void HideButtonHandler() {
 		// If the menu is shown, we hide it
 		if (leftMenu.activeInHierarchy) {
@@ -80,10 +85,12 @@ public class UIManager : MonoBehaviour {
 		}
 	}
 
+	// Cancel an animation
 	private void CancelHandler() {
 		manager.CancelAnimation ();
 	}
 
+	// Modifies the lines or columns of the maze
 	private void GridFormatHandler(bool line) {
 		if (line) {
 			manager.nbLines = int.Parse (gridFormatLineField.text);
@@ -92,10 +99,12 @@ public class UIManager : MonoBehaviour {
 		}
 	}
 
+	// Used to activate or deactivate the animation
 	private void ToggleAnimationHandler() {
 		manager.animated = animationToggle.isOn;
 	}
 
+	// Selects the algorithm we want to use for generation
 	private void GeneratorSelectorHandler() {
 		GeneratorType g = GeneratorType.DFS;
 
@@ -120,10 +129,12 @@ public class UIManager : MonoBehaviour {
 		manager.genType = g;
 	}
 
+	// Activates or deactivates the teleporters
 	private void ToggleTeleportersHandler() {
 		manager.allowTeleporters = teleportersToggle.isOn;
 	}
 
+	// Switch between squares and hexagons
 	private void SwitchShapeHandler() {
 		if (manager.nbBorders == 4) {
 			manager.nbBorders = 6;

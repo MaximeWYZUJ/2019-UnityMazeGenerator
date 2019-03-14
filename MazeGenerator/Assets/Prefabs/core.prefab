@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4963971872822710}
   - component: {fileID: 212443619481768148}
-  - component: {fileID: 114245850514389014}
+  - component: {fileID: 114499879119979224}
   m_Layer: 0
   m_Name: Core
   m_TagString: MazeElement
@@ -41,7 +41,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114245850514389014
+--- !u!114 &114499879119979224
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -49,10 +49,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1902555084710072}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d2b749bde15a2a4ca00f3a425b09b41, type: 3}
+  m_Script: {fileID: 11500000, guid: 858ba47ea33b3b3468683953a2bc3a04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   wallPrefab: {fileID: 1981402113223940, guid: 6ad1e16b21a71134eaa945edbd3f6479, type: 2}
+  teleporter: {fileID: 1050034787862340, guid: f17825179bef81a4b8671fece0796345, type: 2}
 --- !u!212 &212443619481768148
 SpriteRenderer:
   m_ObjectHideFlags: 1
